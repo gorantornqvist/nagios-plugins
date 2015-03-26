@@ -20,6 +20,12 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+#
+# Tip: To ignore capacity warnings which are set quite low, change these rows in check_alerts():
+# if alert['level'] != 'OK':
+#     if alert['message'].find('capacity for the volume') == -1:
+#         errors = errors + 1
+#
 
 import argparse
 import json
