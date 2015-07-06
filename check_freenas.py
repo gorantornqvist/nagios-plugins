@@ -30,6 +30,7 @@
 import argparse
 import json
 import sys
+import string
  
 import requests
  
@@ -67,16 +68,18 @@ class Startup(object):
     def check_repl(self):
         repls = self.request('storage/replication')
         errors=0
+        msg=''
         try:
             for repl in repls:
                 if repl['repl_status'] != 'Succeeded':
                     errors = errors + 1
+                    msg = msg + repl['repl_zfs'] + ' ';
         except:
             print 'UNKNOWN - Error when contacting freenas server: ' + str(sys.exc_info())
             sys.exit(3)
  
         if errors > 0:
-            print 'WARNING - There are ' + str(errors) + ' replication errors. Go to Storage > Replication Tasks > View Replication Tasks in FreeNAS for more details.'
+            print 'WARNING - There are ' + str(errors) + ' replication errors [' + msg.strip() + ']. Go to Storage > Replication Tasks > View Replication Tasks in FreeNAS for more details.'
             sys.exit(1)
         else:
             print 'OK - No replication errors'
@@ -84,17 +87,26 @@ class Startup(object):
  
     def check_alerts(self):
         alerts = self.request('system/alert')
-        errors=0
+        warn=0
+        crit=0
+        msg=''
         try:
             for alert in alerts:
-                if alert['level'] != 'OK':
-                    errors = errors + 1
+                if alert['level'] == 'CRIT':
+                    crit = crit + 1
+                    msg = msg + '- (C) ' + string.replace(alert['message'], '\n', '. ') + ' '
+                elif alert['level'] == 'WARN':
+                    warn = warn + 1
+                    msg = msg + '- (W) ' + string.replace(alert['message'], '\n', '. ') + ' '
         except:
             print 'UNKNOWN - Error when contacting freenas server: ' + str(sys.exc_info())
             sys.exit(3)
- 
-        if errors > 0:
-            print 'WARNING - There are ' + str(errors) + ' alerts. Click Alert button in FreeNAS for more details.'
+        
+        if crit > 0:
+            print 'CRITICAL ' + msg
+            sys.exit(2)
+        elif warn > 0:
+            print 'WARNING ' + msg
             sys.exit(1)
         else:
             print 'OK - No problem alerts'
