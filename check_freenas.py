@@ -71,7 +71,7 @@ class Startup(object):
         msg=''
         try:
             for repl in repls:
-                if repl['repl_status'] != 'Succeeded':
+                if repl['repl_status'] != 'Succeeded' and repl['repl_status'] != None:
                     errors = errors + 1
                     msg = msg + repl['repl_zfs'] + ' ';
         except:
