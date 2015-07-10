@@ -71,15 +71,15 @@ class Startup(object):
         msg=''
         try:
             for repl in repls:
-                if repl['repl_status'] != 'Succeeded' and repl['repl_status'] != None:
+                if repl['repl_status'] != 'Succeeded' and repl['repl_status'] != None and repl['repl_status'][:7] != 'Sending':
                     errors = errors + 1
-                    msg = msg + repl['repl_zfs'] + ' ';
+                    msg = msg + repl['repl_zfs'] + ' [' +  repl['repl_status'] + '] ' ;
         except:
             print 'UNKNOWN - Error when contacting freenas server: ' + str(sys.exc_info())
             sys.exit(3)
  
         if errors > 0:
-            print 'WARNING - There are ' + str(errors) + ' replication errors [' + msg.strip() + ']. Go to Storage > Replication Tasks > View Replication Tasks in FreeNAS for more details.'
+            print 'WARNING - ' + msg.strip() + '. Go to Storage > Replication Tasks > View Replication Tasks in FreeNAS for more details.'
             sys.exit(1)
         else:
             print 'OK - No replication errors'
