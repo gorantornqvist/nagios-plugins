@@ -21,6 +21,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
+# ******************************************************************************
+# check_freenas.py - Simple script for monitoring freenas status and replication
+# PS: you may want to check out this script as well:
+# https://github.com/Doctor-love/check_freenas_api/blob/master/check_freenas_api.py
+#
+#
 # Tip: To ignore capacity warnings which are set quite low, change these rows in check_alerts():
 # if alert['level'] != 'OK':
 #     if alert['message'].find('capacity for the volume') == -1:
