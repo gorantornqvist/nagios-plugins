@@ -32,6 +32,8 @@
 #     if alert['message'].find('capacity for the volume') == -1:
 #         errors = errors + 1
 #
+# Troubleshooting: If you receive an error from the script, make sure you can access the api of your freenas using a web browser. 
+# Example: http://freenas/api/v1.0/system/alert/?format=json (login: root)
 
 import argparse
 import json
