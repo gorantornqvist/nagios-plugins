@@ -120,13 +120,22 @@ class Startup(object):
         else:
             print 'OK - No problem alerts'
             sys.exit(0)
+
+    def check_updates(self):
+        updates = self.request('system/update/check')
+        if not updates:
+            print 'OK - No pending updates.'
+            sys.exit(0)
+        else:
+            print 'WARNING - There are pending updates. Go to System > Update to apply pending updates.'
+            sys.exit(1)
  
 def main():
     parser = argparse.ArgumentParser(description='Checks a freenas server using the API')
     parser.add_argument('-H', '--hostname', required=True, type=str, help='Hostname or IP address')
     parser.add_argument('-u', '--user', required=True, type=str, help='Normally only root works')
     parser.add_argument('-p', '--passwd', required=True, type=str, help='Password')
-    parser.add_argument('-t', '--type', required=True, type=str, help='Type of check, either repl or alerts')
+    parser.add_argument('-t', '--type', required=True, type=str, help='Type of check, either repl, alerts or updates')
  
     args = parser.parse_args(sys.argv[1:])
  
@@ -136,6 +145,8 @@ def main():
         startup.check_alerts()
     elif args.type == 'repl':
         startup.check_repl()
+    elif args.type == 'updates':
+        startup.check_updates()
     else:
         print "Unknown type: " + args.type
         sys.exit(3)
